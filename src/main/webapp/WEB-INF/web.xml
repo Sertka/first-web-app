@@ -6,55 +6,23 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
   <display-name>Archetype Created Web Application</display-name>
 
-<servlet>
-  <servlet-name>main_servlet</servlet-name>
-  <servlet-class>ru.geekbrains.Main</servlet-class>
-</servlet>
 
-  <servlet-mapping>
-    <servlet-name>main_servlet</servlet-name>
-    <url-pattern>main</url-pattern>
-  </servlet-mapping>
-
-
-  <servlet>
-    <servlet-name>cat_servlet</servlet-name>
-    <servlet-class>ru.geekbrains.Catalog</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>cat_servlet</servlet-name>
-    <url-pattern>catalog</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
+<!--  <servlet>
     <servlet-name>cart_servlet</servlet-name>
-    <servlet-class>ru.geekbrains.Cart</servlet-class>
+    <servlet-class>ru.geekbrains.old.Cart</servlet-class>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>cart_servlet</servlet-name>
     <url-pattern>cart</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>order_servlet</servlet-name>
-    <servlet-class>ru.geekbrains.Order</servlet-class>
-  </servlet>
+  </servlet-mapping>-->
 
   <servlet-mapping>
-    <servlet-name>order_servlet</servlet-name>
-    <url-pattern>order</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>product_servlet</servlet-name>
-    <servlet-class>ru.geekbrains.Product</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>product_servlet</servlet-name>
-    <url-pattern>product</url-pattern>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.html</url-pattern>
+    <url-pattern>*.css</url-pattern>
+    <url-pattern>*.js</url-pattern>
+    <url-pattern>*.jpg</url-pattern>
   </servlet-mapping>
 
   <error-page>
