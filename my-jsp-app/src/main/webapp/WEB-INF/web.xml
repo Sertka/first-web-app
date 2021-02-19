@@ -25,6 +25,12 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
     <url-pattern>*.jpg</url-pattern>
   </servlet-mapping>
 
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.xhtml</welcome-file>
+  </welcome-file-list>
+
   <error-page>
     <error-code>404</error-code>
     <location>/404.html</location>
@@ -34,7 +40,6 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
     <error-code>403</error-code>
     <location>/403.html</location>
   </error-page>
-
 
 </web-app>
 
