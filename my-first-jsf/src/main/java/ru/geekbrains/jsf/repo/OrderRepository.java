@@ -2,7 +2,7 @@ package ru.geekbrains.jsf.repo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.geekbrains.jsf.entity.Product;
+import ru.geekbrains.jsf.entity.Order;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -18,9 +18,9 @@ import java.util.List;
 
 @Named
 @ApplicationScoped
-public class ProductRepository {
+public class OrderRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderRepository.class);
 
     @PersistenceContext(unitName = "ds")
     private EntityManager em;
@@ -30,16 +30,16 @@ public class ProductRepository {
 
     @PostConstruct
     public void init() throws Exception {
-        if (countAll() == 0) {
+        if (countAllOrders() == 0) {
             try {
                 ut.begin();
 
-                saveOrUpdate(new Product(null, "Product  1",
-                        "Description of product 1", new BigDecimal(100), 1L));
-                saveOrUpdate(new Product(null, "Product  2",
-                        "Description of product 2", new BigDecimal(200), 2L));
-                saveOrUpdate(new Product(null, "Product  3",
-                        "Description of product 3", new BigDecimal(200), 3L));
+                saveOrUpdate(new Order(null, "Order 1",
+                        new BigDecimal(100), 1L));
+                saveOrUpdate(new Order(null, "Order 2",
+                        new BigDecimal(200), 2L));
+                saveOrUpdate(new Order(null, "Order 3",
+                        new BigDecimal(300), 3L));
 
                 ut.commit();
             } catch (Exception ex) {
@@ -49,31 +49,31 @@ public class ProductRepository {
         }
     }
 
-    public List<Product> findAll() {
-        return em.createNamedQuery("findAll", Product.class)
+    public List<Order> findAllOrders() {
+        return em.createNamedQuery("findAllOrders", Order.class)
                 .getResultList();
     }
 
-    public Product findById(Long id) {
-        return em.find(Product.class, id);
+    public Order findOrderById(Long id) {
+        return em.find(Order.class, id);
     }
 
-    public Long countAll() {
-        return em.createNamedQuery("countAll", Long.class)
+    public Long countAllOrders() {
+        return em.createNamedQuery("countAllOrders", Long.class)
                 .getSingleResult();
     }
 
     @Transactional
-    public void saveOrUpdate(Product product) {
-        if (product.getId() == null) {
-            em.persist(product);
+    public void saveOrUpdate(Order order) {
+        if (order.getId() == null) {
+            em.persist(order);
         }
-        em.merge(product);
+        em.merge(order);
     }
 
     @Transactional
-    public void deleteById(Long id) {
-        em.createNamedQuery("deleteById")
+    public void deleteOrderById(Long id) {
+        em.createNamedQuery("deleteOrderById")
                 .setParameter("id", id)
                 .executeUpdate();
     }
