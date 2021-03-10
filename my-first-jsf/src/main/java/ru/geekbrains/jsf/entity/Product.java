@@ -1,19 +1,19 @@
 package ru.geekbrains.jsf.entity;
 
+import ru.geekbrains.jsf.entity.Category;
+import ru.geekbrains.jsf.service.ProductRepr;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
 @NamedQueries({
-        @NamedQuery(name = "findAll", query = "from Product"),
-        @NamedQuery(name = "countAll", query = "select count(*) from Product"),
-        @NamedQuery(name = "deleteById", query = "delete from Product p where p.id = :id")
+        @NamedQuery(name = "findAllProducts", query = "from Product"),
+        @NamedQuery(name = "countAllProducts", query = "select count(*) from Product"),
+        @NamedQuery(name = "deleteProductById", query = "delete from Product p where p.id = :id")
 })
-
 public class Product {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,34 +22,37 @@ public class Product {
     @Column
     private String name;
 
-    @Column (length = 1024)
+    @Column(length = 1024)
     private String description;
 
     @Column
     private BigDecimal price;
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @Column
-    private Long categoryId;
+    @ManyToOne
+    private Category category;
 
     public Product() {
     }
 
-    public Product(Long id, String name, String description, BigDecimal price, Long categoryId) {
+    public Product(Long id, String name, String description, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.categoryId = categoryId;
     }
 
+    public Product(ProductRepr productRepr, Category category) {
+        this(productRepr.getId(), productRepr.getName(), productRepr.getDescription(), productRepr.getPrice());
+        this.category = category;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -75,11 +78,11 @@ public class Product {
         this.price = price;
     }
 
-    public Long getId() {
-        return id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

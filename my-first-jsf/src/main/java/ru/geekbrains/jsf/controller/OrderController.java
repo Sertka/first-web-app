@@ -1,9 +1,17 @@
 package ru.geekbrains.jsf.controller;
 
+import ru.geekbrains.jsf.entity.Category;
 import ru.geekbrains.jsf.entity.Order;
+import ru.geekbrains.jsf.entity.Product;
+import ru.geekbrains.jsf.repo.CategoryRepository;
 import ru.geekbrains.jsf.repo.OrderRepository;
+import ru.geekbrains.jsf.repo.ProductRepository;
+import ru.geekbrains.jsf.service.OrderRepr;
+import ru.geekbrains.jsf.service.OrderService;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -13,39 +21,59 @@ import java.util.List;
 @SessionScoped
 public class OrderController implements Serializable {
 
-    @Inject
-    private OrderRepository orderRepository;
+    @EJB
+    private OrderService OrderService;
 
-    private Order order;
+    @EJB
+    private ProductRepository productRepository;
 
-    public Order getOrder() {
+    private OrderRepr order;
+
+    private List<OrderRepr> orders;
+
+    private List<Product> products;
+
+    public void preloadData(ComponentSystemEvent componentSystemEvent) {
+        orders = OrderService.findAll();
+        products = productRepository.findAll();
+    }
+
+    public OrderRepr getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderRepr order) {
         this.order = order;
     }
 
     public String createOrder() {
-        this.order = new Order();
-        return "/order_form.xhtml?faces-redirect-true";
+        this.order = new OrderRepr();
+        return "/order_form.xhtml?faces-redirect=true";
     }
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAllOrders();
+    public List<OrderRepr> getAllOrders() {
+        return orders;
     }
 
-    public String editOrder(Order order) {
+    public String editOrder(OrderRepr order) {
         this.order = order;
-        return "/order_form.xhtml?faces-redirect-true";
+        return "/order_form.xhtml?faces-redirect=true";
     }
 
-    public void deleteOrder(Order Order) {
-        orderRepository.deleteOrderById(Order.getId());
+    public void deleteOrder(OrderRepr order) {
+        OrderService.deleteById(order.getId());
     }
 
     public String saveOrder() {
-        orderRepository.saveOrUpdate(order);
-        return "/order.xhtml?faces-redirect-true";
+        OrderService.saveOrUpdate(order);
+        return "/order.xhtml?faces-redirect=true";
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

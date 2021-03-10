@@ -1,10 +1,10 @@
 package ru.geekbrains.jsf.controller;
 
-import ru.geekbrains.jsf.entity.Product;
-import ru.geekbrains.jsf.repo.CartService;
+import ru.geekbrains.jsf.service.CartService;
+import ru.geekbrains.jsf.service.ProductRepr;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -13,21 +13,21 @@ import java.util.List;
 @SessionScoped
 public class CartController implements Serializable {
 
-    @Inject
+
+    @EJB
     private CartService cartService;
 
-
-    public String addToCart(Product product) {
-        cartService.addProduct(product);
+    public String addToCart(ProductRepr product) {
+        cartService.addToCart(product);
         return  "/cart.xhtml?faces-redirect-true";
     }
 
-    public String removeFromCart(Product product) {
-        cartService.deleteById(product.getId());
+    public String removeFromCart(ProductRepr product) {
+        cartService.removeFromCart(product);
         return  "/cart.xhtml?faces-redirect-true";
     }
 
-    public List<Product> getAllProducts() {
-        return cartService.findAll();
+    public List<ProductRepr> getAllProducts() {
+        return cartService.getAllProducts();
     }
 }

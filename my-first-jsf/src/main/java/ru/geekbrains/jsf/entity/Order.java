@@ -1,5 +1,7 @@
 package ru.geekbrains.jsf.entity;
 
+import ru.geekbrains.jsf.service.OrderRepr;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -23,17 +25,23 @@ public class Order {
     @Column
     private BigDecimal orderPrice;
 
-    @Column
-    private Long productId;
+    @ManyToOne
+    private Product product;
+
+
 
     public Order() {
     }
 
-    public Order(Long id, String description, BigDecimal orderPrice, Long productId) {
+    public Order(Long id, String description, BigDecimal orderPrice) {
         this.id = id;
         this.description = description;
         this.orderPrice = orderPrice;
-        this.productId = productId;
+    }
+
+    public Order(OrderRepr orderRepr, Product product) {
+        this(orderRepr.getId(), orderRepr.getDescription(), orderRepr.getOrderPrice());
+        this.product = product;
     }
 
     public Long getId() {
@@ -60,12 +68,12 @@ public class Order {
         this.orderPrice = orderPrice;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

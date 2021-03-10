@@ -2,22 +2,15 @@ package ru.geekbrains.jsf.repo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.geekbrains.jsf.entity.Category;
 import ru.geekbrains.jsf.entity.Product;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
-import java.math.BigDecimal;
 import java.util.List;
 
-
-@Named
-@ApplicationScoped
+@Stateless
 public class ProductRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductRepository.class);
@@ -25,33 +18,13 @@ public class ProductRepository {
     @PersistenceContext(unitName = "ds")
     private EntityManager em;
 
-    @Resource
-    private UserTransaction ut;
-
-    @PostConstruct
-    public void init() throws Exception {
-        if (countAll() == 0) {
-            try {
-                ut.begin();
-
-                saveOrUpdate(new Product(null, "Product  1",
-                        "Description of product 1", new BigDecimal(100), 1L));
-                saveOrUpdate(new Product(null, "Product  2",
-                        "Description of product 2", new BigDecimal(200), 2L));
-                saveOrUpdate(new Product(null, "Product  3",
-                        "Description of product 3", new BigDecimal(200), 3L));
-
-                ut.commit();
-            } catch (Exception ex) {
-                logger.error("", ex);
-                ut.rollback();
-            }
-        }
+    public List<Product> findAll() {
+        return em.createNamedQuery("findAllProducts", Product.class)
+                .getResultList();
     }
 
-    public List<Product> findAll() {
-        return em.createNamedQuery("findAll", Product.class)
-                .getResultList();
+    public Product getReference(Long id) {
+        return em.getReference(Product.class, id);
     }
 
     public Product findById(Long id) {
@@ -59,11 +32,10 @@ public class ProductRepository {
     }
 
     public Long countAll() {
-        return em.createNamedQuery("countAll", Long.class)
+        return em.createNamedQuery("countAllProducts", Long.class)
                 .getSingleResult();
     }
 
-    @Transactional
     public void saveOrUpdate(Product product) {
         if (product.getId() == null) {
             em.persist(product);
@@ -71,9 +43,8 @@ public class ProductRepository {
         em.merge(product);
     }
 
-    @Transactional
     public void deleteById(Long id) {
-        em.createNamedQuery("deleteById")
+        em.createNamedQuery("deleteProductById")
                 .setParameter("id", id)
                 .executeUpdate();
     }
